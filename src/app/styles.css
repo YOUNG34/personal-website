@@ -343,9 +343,26 @@
   padding: 8rem 2rem 4rem;
 }
 
-.article {
-  max-width: 720px;
+.articleLayout {
+  display: flex;
+  gap: 3rem;
+  max-width: 900px;
   margin: 0 auto;
+  position: relative;
+}
+
+.articleLeft {
+  flex: 0 0 220px;
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+
+.articleRight {
+  flex: 1;
+}
+
+.article {
   background: var(--bg-card);
   border: 2px solid var(--border-color);
   border-radius: 12px;
@@ -519,6 +536,76 @@
   color: var(--text-primary);
 }
 
+/* Table of Contents 目录 */
+.toc-container {
+  margin-bottom: 2rem;
+}
+
+.toc-inner {
+  position: sticky;
+  top: 100px;
+}
+
+.toc-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px dashed var(--border-color);
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-item {
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.toc-item.level-2 {
+  padding-left: 0;
+}
+
+.toc-item.level-3 {
+  padding-left: 1rem;
+  opacity: 0.8;
+}
+
+.toc-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  display: block;
+  padding: 0.25rem 0;
+}
+
+.toc-link:hover {
+  color: var(--accent-primary);
+  padding-left: 0.5rem;
+  transition: padding-left 0.3s ease;
+}
+
+.toc-item.active .toc-link {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.toc-item.active::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 0.45rem;
+  bottom: 0.45rem;
+  width: 2px;
+  background: var(--accent-primary);
+  border-radius: 2px;
+}
+
 /* About 关于页 */
 .aboutMain {
   min-height: 100vh;
@@ -588,6 +675,17 @@
     padding: 6rem 1.5rem 3rem;
   }
   
+  .articleLayout {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .articleLeft {
+    flex: none;
+    width: 100%;
+    position: static;
+  }
+  
   .article,
   .aboutContent {
     padding: 2rem 1.5rem;
@@ -596,5 +694,13 @@
   .articleMeta {
     flex-direction: column;
     gap: 0.5rem;
+  }
+  
+  .toc-item.active::before {
+    display: none;
+  }
+  
+  .toc-link:hover {
+    padding-left: 0;
   }
 }

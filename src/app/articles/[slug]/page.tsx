@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation'
 import { getArticleBySlug, getArticles } from '@/lib/articles'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import remarkSlug from 'remark-slug'
+import TableOfContents from '@/components/TableOfContents'
 import '../../styles.css'
 
 interface Props {
@@ -29,25 +31,32 @@ export default function ArticlePage({ params }: Props) {
       <Navigation />
       
       <main className="articleMain">
-        <article className="article">
-          <header className="articleHeader">
-            <p className="articleDate">{article.date}</p>
-            <h1 className="articleTitle">{article.title}</h1>
-            {article.description && (
-              <p className="articleDesc">{article.description}</p>
-            )}
-            <div className="articleMeta">
-              <span>✍️ {article.author}</span>
-              <span>📧 {article.email}</span>
-            </div>
-          </header>
-          
-          <div className="articleContent">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {article.content}
-            </ReactMarkdown>
+        <div className="articleLayout">
+          <div className="articleLeft">
+            <TableOfContents content={article.content} />
           </div>
-        </article>
+          <div className="articleRight">
+            <article className="article">
+              <header className="articleHeader">
+                <p className="articleDate">{article.date}</p>
+                <h1 className="articleTitle">{article.title}</h1>
+                {article.description && (
+                  <p className="articleDesc">{article.description}</p>
+                )}
+                <div className="articleMeta">
+                  <span>✍️ {article.author}</span>
+                  <span>📧 {article.email}</span>
+                </div>
+              </header>
+              
+              <div className="articleContent">
+                <ReactMarkdown remarkPlugins={[remarkGfm, remarkSlug as any]}>
+                  {article.content}
+                </ReactMarkdown>
+              </div>
+            </article>
+          </div>
+        </div>
       </main>
 
       <Footer />
