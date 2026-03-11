@@ -929,3 +929,327 @@
     display: none;
   }
 }
+
+/* 汉堡菜单样式 */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  padding: 0.5rem;
+  position: relative;
+  z-index: 101;
+}
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.hamburger span:nth-child(1) {
+  transform-origin: left;
+}
+
+.hamburger span:nth-child(3) {
+  align-self: flex-end;
+}
+
+/* 移动端导航栏优化 */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+  
+  .nav {
+    padding: 1rem 1.5rem;
+  }
+  
+  .navLogo {
+    font-size: 1.3rem;
+  }
+  
+  .navLikeSection {
+    order: -1;
+    margin-right: 0.5rem;
+  }
+  
+  .like-button {
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .like-icon {
+    font-size: 1rem;
+  }
+  
+  .like-count {
+    font-size: 0.9rem;
+  }
+  
+  /* 首页 Hero 优化 */
+  .hero {
+    padding: 5rem 1.5rem 3rem;
+  }
+  
+  .heroLabel {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .heroTitle {
+    font-size: clamp(2rem, 8vw, 2.5rem);
+  }
+  
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+  
+  /* 特色卡片网格优化 */
+  .featureGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  /* 文章列表优化 */
+  .articlesGrid {
+    gap: 1.5rem;
+  }
+  
+  .articleCard {
+    padding: 1.5rem;
+  }
+  
+  .articleCardTitle {
+    font-size: 1.2rem;
+  }
+  
+  /* 文章详情页优化 */
+  .articleHeader {
+    padding-bottom: 1.5rem;
+  }
+  
+  .articleDate {
+    font-size: 0.85rem;
+  }
+  
+  .articleTitle {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+  
+  .articleDesc {
+    font-size: 1rem;
+  }
+  
+  /* 目录列表优化 */
+  .toc-nav {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .toc-list {
+    max-height: 280px;
+    overflow-y: auto;
+  }
+  
+  /* 关于页优化 */
+  .aboutContent {
+    padding: 1.5rem;
+  }
+  
+  .aboutTitle {
+    font-size: clamp(1.8rem, 8vw, 2.2rem);
+  }
+}
+
+/* 小屏幕手机优化 (max-width: 480px) */
+@media (max-width: 480px) {
+  .nav {
+    padding: 0.8rem 1rem;
+  }
+  
+  .navLogo {
+    font-size: 1.2rem;
+  }
+  
+  .navLinks {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: rgba(250, 248, 245, 0.98);
+    backdrop-filter: blur(10px);
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+    border-bottom: 2px dashed var(--border-color);
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .navLinks.active {
+    transform: translateY(0);
+  }
+  
+  .navLinks li {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .navLinks a {
+    display: block;
+    padding: 0.75rem;
+    border-radius: 8px;
+    width: 100%;
+    text-decoration: none;
+  }
+  
+  .navLinks a:hover::after {
+    display: none;
+  }
+  
+  .navLinks a:hover {
+    background: rgba(224, 122, 95, 0.1);
+  }
+  
+  /* Hero 优化 */
+  .hero {
+    padding: 4rem 1rem 2.5rem;
+  }
+  
+  .heroLabel {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+  }
+  
+  .heroTitle {
+    font-size: clamp(1.8rem, 10vw, 2.2rem);
+    margin-bottom: 1rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+  }
+  
+  .heroCta {
+    padding: 0.8rem 2rem;
+    font-size: 0.95rem;
+  }
+  
+  /* 特色卡片 */
+  .features {
+    padding: 2rem 1rem;
+  }
+  
+  .featureCard {
+    padding: 2rem 1.5rem;
+  }
+  
+  .featureCard h3 {
+    font-size: 1.15rem;
+  }
+  
+  /* 文章卡片 */
+  .articleCard {
+    padding: 1.25rem;
+  }
+  
+  .articleCardDate {
+    font-size: 0.8rem;
+  }
+  
+  .articleCardTitle {
+    font-size: 1.1rem;
+  }
+  
+  .articleCardDesc {
+    font-size: 0.9rem;
+  }
+  
+  /* 文章详情 */
+  .article {
+    padding: 1.5rem;
+  }
+  
+  .articleContent {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+  
+  .articleContent h2 {
+    font-size: 1.4rem;
+    margin-top: 2rem;
+  }
+  
+  .articleContent h3 {
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+  }
+  
+  .articleContent p {
+    font-size: 1rem;
+  }
+  
+  /* 目录导航 */
+  .toc-container {
+    display: none;
+  }
+  
+  /* 访客弹窗 */
+  .visitor-popup {
+    padding: 1.25rem;
+    width: 95%;
+  }
+  
+  .visitor-icon {
+    font-size: 2.2rem;
+  }
+  
+  .visitor-text {
+    font-size: 0.95rem;
+  }
+  
+  .visitor-text strong {
+    font-size: 1.1rem;
+  }
+  
+  .visitor-subtext {
+    font-size: 0.85rem;
+  }
+  
+  /* About 页面 */
+  .aboutTitle {
+    font-size: clamp(1.6rem, 10vw, 2rem);
+  }
+  
+  /* 装饰元素简化 */
+  .decorationTop,
+  .decorationBottom {
+    display: none;
+  }
+}
+
+/* 点击区域最小 44px (touch-friendly) */
+@media (pointer: coarse) {
+  .like-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .navLinks a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .visitor-close-btn {
+    min-width: 44px;
+    min-height: 44px;
+    right: 0.5rem;
+    top: 0.5rem;
+    border-radius: 50%;
+  }
+}

@@ -22,6 +22,13 @@ export default async function Navigation() {
         Owen's Notebook
       </Link>
       
+      {/* 汉堡菜单 - 仅移动端显示 */}
+      <div className="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      
       <div className="navLikeSection">
         <LikeButton initialLikes={initialLikes} />
       </div>
