@@ -1,5 +1,4 @@
-import { kv } from '@vercel/kv'
-import Redis from 'ioredis'
+import { createClient } from 'redis'
 
 // 检查环境变量
 const KV_URL = 
@@ -13,43 +12,57 @@ const KV_TOKEN =
 
 const REDIS_URL = process.env.REDIS_URL
 
-// 初始化 Redis 客户端（支持多种方式）
-export function getRedisClient() {
+// 初始化 Redis 客户端
+let redisClient: ReturnType<typeof createClient> | null = null
+let isClientInitialized = false
+
+export async function getRedisClient() {
+  if (redisClient && isClientInitialized) {
+    return redisClient
+  }
+
+  // 尝试不同的连接方式
+  let client: ReturnType<typeof createClient>
+  
   if (REDIS_URL) {
     // Redis Labs 或其他 Redis 连接字符串
-    try {
-      return new Redis(REDIS_URL)
-    } catch (error) {
-      console.error('Failed to initialize Redis client:', error)
-      return null
-    }
-  }
-  
-  if (KV_URL && KV_TOKEN) {
+    client = createClient({ url: REDIS_URL })
+  } else if (KV_URL && KV_TOKEN) {
     // Vercel KV 或 Upstash Redis
-    try {
-      return kv
-    } catch (error) {
-      console.error('Failed to initialize KV client:', error)
-      return null
-    }
+    const url = KV_URL.replace(/^https?:\/\//, 'redis://')
+    client = createClient({ url, password: KV_TOKEN })
+  } else {
+    console.warn('No Redis configuration found, using mock mode')
+    return null
   }
-  
-  return null
+
+  // 错误处理
+  client.on('error', (err) => {
+    console.error('Redis Client Error:', err)
+  })
+
+  try {
+    await client.connect()
+    redisClient = client
+    isClientInitialized = true
+    console.log('Redis client initialized successfully')
+    return client
+  } catch (error) {
+    console.error('Failed to initialize Redis client:', error)
+    return null
+  }
 }
 
 // 获取点赞数
 export async function getLikes(): Promise<number> {
-  const client = getRedisClient()
+  const client = await getRedisClient()
   if (!client) {
     return 1688 // 默认值
   }
   
   try {
     const likesRaw = await client.get('likes')
-    const likes = typeof likesRaw === 'string' || typeof likesRaw === 'number' 
-      ? Number(likesRaw) 
-      : null
+    const likes = likesRaw !== null ? Number(likesRaw) : null
     return likes ?? 1688
   } catch (error) {
     console.error('Failed to get likes:', error)
@@ -59,7 +72,7 @@ export async function getLikes(): Promise<number> {
 
 // 增加点赞数
 export async function incrementLikes(): Promise<number> {
-  const client = getRedisClient()
+  const client = await getRedisClient()
   if (!client) {
     return 1689 // 默认值
   }
@@ -67,9 +80,7 @@ export async function incrementLikes(): Promise<number> {
   try {
     await client.incr('likes')
     const likesRaw = await client.get('likes')
-    const likes = typeof likesRaw === 'string' || typeof likesRaw === 'number' 
-      ? Number(likesRaw) 
-      : null
+    const likes = likesRaw !== null ? Number(likesRaw) : null
     return likes ?? 1689
   } catch (error) {
     console.error('Failed to increment likes:', error)
@@ -79,16 +90,14 @@ export async function incrementLikes(): Promise<number> {
 
 // 获取访客数
 export async function getVisitors(): Promise<number> {
-  const client = getRedisClient()
+  const client = await getRedisClient()
   if (!client) {
     return 1688 // 默认值
   }
   
   try {
     const visitorsRaw = await client.get('visitors')
-    const visitors = typeof visitorsRaw === 'string' || typeof visitorsRaw === 'number' 
-      ? Number(visitorsRaw) 
-      : null
+    const visitors = visitorsRaw !== null ? Number(visitorsRaw) : null
     return visitors ?? 1688
   } catch (error) {
     console.error('Failed to get visitors:', error)
@@ -98,7 +107,7 @@ export async function getVisitors(): Promise<number> {
 
 // 增加访客数（基于 IP 防重复）
 export async function incrementVisitors(ip: string): Promise<number> {
-  const client = getRedisClient()
+  const client = await getRedisClient()
   if (!client) {
     return 1689 // 默认值
   }
@@ -110,9 +119,7 @@ export async function incrementVisitors(ip: string): Promise<number> {
     // 已访问过，不增加
     try {
       const visitorsRaw = await client.get('visitors')
-      const visitors = typeof visitorsRaw === 'string' || typeof visitorsRaw === 'number' 
-        ? Number(visitorsRaw) 
-        : null
+      const visitors = visitorsRaw !== null ? Number(visitorsRaw) : null
       return visitors ?? 1688
     } catch {
       return 1688
@@ -122,11 +129,9 @@ export async function incrementVisitors(ip: string): Promise<number> {
   // 首次访问，增加访客数
   try {
     await client.incr('visitors')
-    await client.set(visitedKey, '1', 'EX', 60 * 60 * 24 * 30) // 30天过期
+    await client.set(visitedKey, '1', { EX: 60 * 60 * 24 * 30 }) // 30天过期
     const visitorsRaw = await client.get('visitors')
-    const visitors = typeof visitorsRaw === 'string' || typeof visitorsRaw === 'number' 
-      ? Number(visitorsRaw) 
-      : null
+    const visitors = visitorsRaw !== null ? Number(visitorsRaw) : null
     return visitors ?? 1689
   } catch (error) {
     console.error('Failed to increment visitors:', error)

@@ -6,7 +6,7 @@ let mockLikes = 1688
 
 export async function POST(request: NextRequest) {
   try {
-    const client = getRedisClient()
+    const client = await getRedisClient()
     
     if (!client) {
       // Mock 模式：每次点赞增加计数
@@ -37,13 +37,14 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    const client = getRedisClient()
+    const client = await getRedisClient()
     
     if (!client) {
       return NextResponse.json({ likes: mockLikes, isMock: true })
     }
 
-    const likes = await client.get<number>('likes') || 1688
+    const likesRaw = await client.get('likes')
+    const likes = likesRaw !== null ? Number(likesRaw) : 1688
 
     return NextResponse.json({ likes, isMock: false })
   } catch (error) {

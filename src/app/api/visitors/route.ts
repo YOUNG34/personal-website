@@ -6,7 +6,7 @@ let mockVisitors = 1688
 
 export async function GET(request: NextRequest) {
   try {
-    const client = getRedisClient()
+    const client = await getRedisClient()
     
     if (!client) {
       // Mock 模式：每次请求都增加访客数
