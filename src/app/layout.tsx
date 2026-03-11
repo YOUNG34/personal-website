@@ -2,7 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: '笔记本 | Owen 的个人博客',
+  title: "Owen's Notebook",
   description: '用文字记录生活的点滴，分享思考与感悟',
 }
 

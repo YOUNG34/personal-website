@@ -5,7 +5,7 @@ export default function Navigation() {
   return (
     <nav className="nav">
       <Link href="/" className="navLogo">
-        笔记本
+        Owen's Notebook
       </Link>
       
       <ul className="navLinks">
