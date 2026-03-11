@@ -5,7 +5,7 @@ export default function Navigation() {
   return (
     <nav className="nav">
       <Link href="/" className="navLogo">
-        文字之间
+        笔记本
       </Link>
       
       <ul className="navLinks">

@@ -36,6 +36,10 @@ export default function ArticlePage({ params }: Props) {
             {article.description && (
               <p className="articleDesc">{article.description}</p>
             )}
+            <div className="articleMeta">
+              <span>✍️ {article.author}</span>
+              <span>📧 {article.email}</span>
+            </div>
           </header>
           
           <div className="articleContent">

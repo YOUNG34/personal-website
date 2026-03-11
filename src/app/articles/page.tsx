@@ -13,14 +13,14 @@ export default function ArticlesPage() {
       
       <main className="articlesMain">
         <header className="articlesHeader">
-          <h1 className="articlesTitle">文章</h1>
-          <p className="articlesDesc">记录思考与感悟</p>
+          <h1 className="articlesTitle">📚 文章</h1>
+          <p className="articlesDesc">记录生活，分享思考</p>
         </header>
 
         <div className="articlesGrid">
           {articles.length === 0 ? (
-            <p style={{ color: 'var(--text-secondary)', textAlign: 'center' }}>
-              暂无文章
+            <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '3rem' }}>
+              暂无文章，敬请期待...
             </p>
           ) : (
             articles.map((article) => (
@@ -32,6 +32,7 @@ export default function ArticlesPage() {
                 <p className="articleCardDate">{article.date}</p>
                 <h2 className="articleCardTitle">{article.title}</h2>
                 <p className="articleCardDesc">{article.description}</p>
+                <p className="articleCardAuthor">✍️ {article.author}</p>
               </Link>
             ))
           )}
