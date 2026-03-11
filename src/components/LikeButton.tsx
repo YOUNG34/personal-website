@@ -11,12 +11,18 @@ export default function LikeButton({ initialLikes }: LikeButtonProps) {
   const [hasLiked, setHasLiked] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
 
-  // 从 localStorage 检查是否已点赞
+  // 从 localStorage 检查是否已点赞，并获取最新点赞数
   useEffect(() => {
-    const hasLiked = localStorage.getItem('liked_owen_website')
-    if (hasLiked) {
+    const liked = localStorage.getItem('liked_owen_website')
+    if (liked) {
       setHasLiked(true)
     }
+    
+    // 获取最新点赞数
+    fetch('/api/likes')
+      .then(res => res.json())
+      .then(data => setLikes(data.likes))
+      .catch(() => {})
   }, [])
 
   const handleLike = async () => {
@@ -54,7 +60,7 @@ export default function LikeButton({ initialLikes }: LikeButtonProps) {
         {hasLiked ? '❤️' : '🤍'}
       </span>
       <span className="like-count">{likes}</span>
-      <span className="like-text">点个赞再走吧</span>
+      <span className="like-text">{hasLiked ? '谢谢点赞' : '点个赞再走吧'}</span>
     </button>
   )
 }
