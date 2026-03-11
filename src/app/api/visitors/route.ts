@@ -4,6 +4,9 @@ import { getRedisClient, incrementVisitors } from '@/lib/kv'
 // 模拟访客计数（用于 Mock 模式）
 let mockVisitors = 1688
 
+// API 路由配置：使用 Node.js 运行时
+export const runtime = 'nodejs'
+
 export async function GET(request: NextRequest) {
   try {
     const client = await getRedisClient()
