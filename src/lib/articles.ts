@@ -28,10 +28,14 @@ export function getArticles(): Omit<Article, 'content'>[] {
     const fileContents = fs.readFileSync(fullPath, 'utf8')
     const { data, content } = matter(fileContents)
 
+    const date = data.date instanceof Date 
+      ? data.date.toISOString().split('T')[0] 
+      : data.date || new Date().toISOString().split('T')[0]
+
     return {
       slug,
       title: data.title || 'Untitled',
-      date: data.date || new Date().toISOString().split('T')[0],
+      date,
       description: data.description || content.slice(0, 150) + '...',
     }
   })
@@ -46,10 +50,14 @@ export function getArticleBySlug(slug: string): Article | null {
     const fileContents = fs.readFileSync(fullPath, 'utf8')
     const { data, content } = matter(fileContents)
 
+    const date = data.date instanceof Date 
+      ? data.date.toISOString().split('T')[0] 
+      : data.date || new Date().toISOString().split('T')[0]
+
     return {
       slug,
       title: data.title || 'Untitled',
-      date: data.date || new Date().toISOString().split('T')[0],
+      date,
       description: data.description || '',
       content,
     }
