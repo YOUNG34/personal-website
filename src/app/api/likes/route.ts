@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getKVClient, incrementLikes } from '@/lib/kv'
+import { getRedisClient, incrementLikes } from '@/lib/kv'
 
 // 模拟点赞计数（用于 Mock 模式）
 let mockLikes = 1688
 
 export async function POST(request: NextRequest) {
   try {
-    const kv = getKVClient()
+    const client = getRedisClient()
     
-    if (!kv) {
+    if (!client) {
       // Mock 模式：每次点赞增加计数
       mockLikes++
       return NextResponse.json({ 
@@ -37,13 +37,13 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    const kv = getKVClient()
+    const client = getRedisClient()
     
-    if (!kv) {
+    if (!client) {
       return NextResponse.json({ likes: mockLikes, isMock: true })
     }
 
-    const likes = await kv.get<number>('likes') || 1688
+    const likes = await client.get<number>('likes') || 1688
 
     return NextResponse.json({ likes, isMock: false })
   } catch (error) {
