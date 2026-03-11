@@ -29,7 +29,6 @@ body {
   min-height: 100vh;
 }
 
-/* Typography */
 h1, h2, h3, h4 {
   font-family: 'Songti SC', 'Noto Serif SC', Georgia, serif;
   font-weight: 600;
@@ -46,13 +45,11 @@ a:hover {
   color: var(--accent-copper);
 }
 
-/* Selection */
 ::selection {
   background: var(--accent-warm);
   color: var(--bg-primary);
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
