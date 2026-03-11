@@ -9,6 +9,8 @@ export interface Article {
   title: string
   date: string
   description: string
+  author: string
+  email: string
   content: string
 }
 
@@ -37,6 +39,8 @@ export function getArticles(): Omit<Article, 'content'>[] {
       title: data.title || 'Untitled',
       date,
       description: data.description || content.slice(0, 150) + '...',
+      author: data.author || 'Owen',
+      email: data.email || 'zeyangyz@icloud.com',
     }
   })
 
@@ -59,6 +63,8 @@ export function getArticleBySlug(slug: string): Article | null {
       title: data.title || 'Untitled',
       date,
       description: data.description || '',
+      author: data.author || 'Owen',
+      email: data.email || 'zeyangyz@icloud.com',
       content,
     }
   } catch {

@@ -1,8 +1,16 @@
+---
+title: OpenClaw Agent 工作流架构调优实践
+date: 2026-03-10
+description: 从单点阻塞到并行协作：多 Agent 架构设计模式
+author: Owen
+email: zeyangyz@icloud.com
+---
+
 # OpenClaw Agent 工作流架构调优实践
 
 > 从单点阻塞到并行协作：多 Agent 架构设计模式
 
-**作者**：OpenClaw Team  
+**作者**：Owen  
 **日期**：2026年3月  
 **标签**：Multi-Agent, Workflow, Architecture, OpenClaw
 
