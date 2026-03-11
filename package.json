@@ -9,6 +9,7 @@
     "export": "next build"
   },
   "dependencies": {
+    "@vercel/kv": "^2.0.0",
     "date-fns": "^3.0.0",
     "gray-matter": "^4.0.3",
     "next": "^14.0.0",
