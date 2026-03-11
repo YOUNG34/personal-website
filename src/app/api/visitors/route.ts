@@ -1,16 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getKVClient, incrementVisitors } from '@/lib/kv'
 
+// 模拟访客计数（用于 Mock 模式）
+let mockVisitors = 1688
+
 export async function GET(request: NextRequest) {
   try {
     const kv = getKVClient()
     
     if (!kv) {
-      // 开发模式或未配置 KV，返回模拟数据
-      console.log('KV not configured, using mock mode')
+      // Mock 模式：每次请求都增加访客数
+      mockVisitors++
+      const ip = 'mock_ip'
       return NextResponse.json({ 
-        visitors: 1688,
-        isMock: true
+        visitors: mockVisitors,
+        isMock: true,
+        ip
       })
     }
 
