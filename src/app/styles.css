@@ -710,6 +710,7 @@
   display: flex;
   align-items: center;
   margin-right: 1rem;
+  order: -1;
 }
 
 .like-button {

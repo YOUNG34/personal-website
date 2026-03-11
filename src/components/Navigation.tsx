@@ -18,6 +18,10 @@ export default async function Navigation() {
   
   return (
     <nav className="nav">
+      <div className="navLikeSection">
+        <LikeButton initialLikes={initialLikes} />
+      </div>
+      
       <Link href="/" className="navLogo">
         Owen's Notebook
       </Link>
@@ -27,10 +31,6 @@ export default async function Navigation() {
         <span></span>
         <span></span>
         <span></span>
-      </div>
-      
-      <div className="navLikeSection">
-        <LikeButton initialLikes={initialLikes} />
       </div>
       
       <ul className="navLinks">
