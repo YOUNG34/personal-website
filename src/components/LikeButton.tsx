@@ -26,19 +26,25 @@ export default function LikeButton({ initialLikes }: LikeButtonProps) {
   }, [])
 
   const handleLike = async () => {
-    if (hasLiked) return
+    if (hasLiked) {
+      console.log('已经点赞过了，跳过')
+      return
+    }
 
     setIsAnimating(true)
     
     try {
+      console.log('发送点赞请求...')
       const response = await fetch('/api/likes', {
         method: 'POST',
       })
       
       const data = await response.json()
+      console.log('API 返回:', data)
       setLikes(data.likes)
       setHasLiked(true)
       localStorage.setItem('liked_owen_website', 'true')
+      console.log('点赞成功，新数量:', data.likes)
     } catch (error) {
       console.error('Failed to like:', error)
       // 网络失败时本地增加（仅视觉效果）
@@ -55,6 +61,14 @@ export default function LikeButton({ initialLikes }: LikeButtonProps) {
       onClick={handleLike}
       className={`like-button ${hasLiked ? 'liked' : ''} ${isAnimating ? 'animating' : ''}`}
       aria-label="点赞"
+      title={hasLiked ? '点击清除点赞状态（测试用）' : '点赞'}
+      onContextMenu={(e) => {
+        // 右键清除点赞状态（测试用）
+        e.preventDefault()
+        localStorage.removeItem('liked_owen_website')
+        setHasLiked(false)
+        console.log('已清除点赞状态')
+      }}
     >
       <span className="like-icon">
         {hasLiked ? '❤️' : '🤍'}
