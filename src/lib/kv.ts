@@ -1,5 +1,9 @@
 import { createClient } from 'redis'
 
+// 基础数值（展示时会加上这个数）
+const BASE_LIKES = 1688
+const BASE_VISITORS = 1688
+
 // 检查环境变量
 const KV_URL = 
   process.env.KV_URL || 
@@ -53,63 +57,63 @@ export async function getRedisClient() {
   }
 }
 
-// 获取点赞数
+// 获取点赞数（返回 Redis 值 + 基础值）
 export async function getLikes(): Promise<number> {
   const client = await getRedisClient()
   if (!client) {
-    return 1688 // 默认值
+    return BASE_LIKES
   }
   
   try {
     const likesRaw = await client.get('likes')
-    const likes = likesRaw !== null ? Number(likesRaw) : null
-    return likes ?? 1688
+    const likes = likesRaw !== null ? Number(likesRaw) : 0
+    return BASE_LIKES + likes
   } catch (error) {
     console.error('Failed to get likes:', error)
-    return 1688
+    return BASE_LIKES
   }
 }
 
-// 增加点赞数
+// 增加点赞数（返回 Redis 值 + 基础值）
 export async function incrementLikes(): Promise<number> {
   const client = await getRedisClient()
   if (!client) {
-    return 1689 // 默认值
+    return BASE_LIKES + 1
   }
   
   try {
     await client.incr('likes')
     const likesRaw = await client.get('likes')
-    const likes = likesRaw !== null ? Number(likesRaw) : null
-    return likes ?? 1689
+    const likes = likesRaw !== null ? Number(likesRaw) : 0
+    return BASE_LIKES + likes
   } catch (error) {
     console.error('Failed to increment likes:', error)
-    return 1689
+    return BASE_LIKES + 1
   }
 }
 
-// 获取访客数
+// 获取访客数（返回 Redis 值 + 基础值）
 export async function getVisitors(): Promise<number> {
   const client = await getRedisClient()
   if (!client) {
-    return 1688 // 默认值
+    return BASE_VISITORS
   }
   
   try {
     const visitorsRaw = await client.get('visitors')
-    const visitors = visitorsRaw !== null ? Number(visitorsRaw) : null
-    return visitors ?? 1688
+    const visitors = visitorsRaw !== null ? Number(visitorsRaw) : 0
+    return BASE_VISITORS + visitors
   } catch (error) {
     console.error('Failed to get visitors:', error)
-    return 1688
+    return BASE_VISITORS
   }
 }
 
-// 增加访客数（基于 IP 防重复）
+// 增加访客数（返回 Redis 值 + 基础值）
 export async function incrementVisitors(ip: string): Promise<number> {
   const client = await getRedisClient()
   if (!client) {
-    return 1689 // 默认值
+    return BASE_VISITORS + 1
   }
   
   const visitedKey = `visited_${ip}`
@@ -119,10 +123,10 @@ export async function incrementVisitors(ip: string): Promise<number> {
     // 已访问过，不增加
     try {
       const visitorsRaw = await client.get('visitors')
-      const visitors = visitorsRaw !== null ? Number(visitorsRaw) : null
-      return visitors ?? 1688
+      const visitors = visitorsRaw !== null ? Number(visitorsRaw) : 0
+      return BASE_VISITORS + visitors
     } catch {
-      return 1688
+      return BASE_VISITORS
     }
   }
   
@@ -131,10 +135,10 @@ export async function incrementVisitors(ip: string): Promise<number> {
     await client.incr('visitors')
     await client.set(visitedKey, '1', { EX: 60 * 60 * 24 * 30 }) // 30天过期
     const visitorsRaw = await client.get('visitors')
-    const visitors = visitorsRaw !== null ? Number(visitorsRaw) : null
-    return visitors ?? 1689
+    const visitors = visitorsRaw !== null ? Number(visitorsRaw) : 0
+    return BASE_VISITORS + visitors
   } catch (error) {
     console.error('Failed to increment visitors:', error)
-    return 1689
+    return BASE_VISITORS + 1
   }
 }

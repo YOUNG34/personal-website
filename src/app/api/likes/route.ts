@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getRedisClient, incrementLikes } from '@/lib/kv'
+import { getRedisClient, incrementLikes, getLikes } from '@/lib/kv'
 
 // 模拟点赞计数（用于 Mock 模式）
 let mockLikes = 1688
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // 增加点赞数
+    // 增加点赞数（已包含基础值 1688）
     const likes = await incrementLikes()
 
     return NextResponse.json({ 
@@ -46,8 +46,8 @@ export async function GET() {
       return NextResponse.json({ likes: mockLikes, isMock: true })
     }
 
-    const likesRaw = await client.get('likes')
-    const likes = likesRaw !== null ? Number(likesRaw) : 1688
+    // 使用 getLikes() 获取点赞数（已包含基础值 1688）
+    const likes = await getLikes()
 
     return NextResponse.json({ likes, isMock: false })
   } catch (error) {
