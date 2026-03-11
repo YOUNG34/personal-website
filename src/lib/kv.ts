@@ -1,15 +1,28 @@
 import { kv } from '@vercel/kv'
 
-// 读取 KV_URL 从环境变量
-const KV_URL = process.env.KV_URL || process.env.NEXT_PUBLIC_KV_URL
+// 支持 Vercel KV 和 Upstash Redis 的环境变量
+const KV_URL = 
+  process.env.KV_URL || 
+  process.env.NEXT_PUBLIC_KV_URL ||
+  process.env.UPSTASH_REDIS_REST_URL
+
+const KV_TOKEN = 
+  process.env.KV_TOKEN ||
+  process.env.UPSTASH_REDIS_REST_TOKEN
 
 // 初始化 KV 客户端
 export function getKVClient() {
-  if (!KV_URL) {
-    console.warn('KV_URL is not set, using mock mode')
+  if (!KV_URL || !KV_TOKEN) {
+    console.warn('KV_URL or KV_TOKEN not set, using mock mode')
     return null
   }
-  return kv
+  
+  try {
+    return kv
+  } catch (error) {
+    console.error('Failed to initialize KV client:', error)
+    return null
+  }
 }
 
 // 获取点赞数
