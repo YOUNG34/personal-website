@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import LikeButton from '@/components/LikeButton'
+import LikeButtonWrapper from '@/components/LikeButtonWrapper'
 import '../app/styles.css'
 
 // 预加载点赞数（服务端）
@@ -26,7 +26,7 @@ export default async function Navigation() {
   return (
     <nav className="nav">
       <div className="navLikeSection">
-        <LikeButton initialLikes={initialLikes} />
+        <LikeButtonWrapper initialLikes={initialLikes} />
       </div>
       
       <Link href="/" className="navLogo">
